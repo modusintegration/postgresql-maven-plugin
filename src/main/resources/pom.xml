@@ -18,7 +18,7 @@
             </activation>
             <properties>
                 <postgresql-dist.classifier>linux</postgresql-dist.classifier>
-                <postgresql-dist.type>tar.gz</postgresql-dist.type>
+                <postgresql-dist.type>zip</postgresql-dist.type>
             </properties>
         </profile>
         <profile>
@@ -32,7 +32,7 @@
             </activation>
             <properties>
                 <postgresql-dist.classifier>linux-x64</postgresql-dist.classifier>
-                <postgresql-dist.type>tar.gz</postgresql-dist.type>
+                <postgresql-dist.type>zip</postgresql-dist.type>
             </properties>
         </profile>
         <profile>

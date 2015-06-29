@@ -28,7 +28,6 @@
                     <databaseName>createanddrop</databaseName>
                     <version>9.3.9</version>
                     <port>5433</port>
-                    <host>localhost</host>
                 </configuration>
                 <executions>
                     <execution>
