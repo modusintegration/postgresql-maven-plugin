@@ -1,13 +1,17 @@
 package com.github.adrianboimvaser.postgresql.plugin;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.shared.invoker.*;
 
 @Mojo(name = "initdb")
 public class InitdbMojo extends PgsqlMojo {
@@ -31,10 +35,43 @@ public class InitdbMojo extends PgsqlMojo {
     @Parameter(alias = "data-checksums", property = "data-checksums", defaultValue = "false")
     protected boolean dataChecksums;
 
+    @Parameter
+    protected String version;
+
+
     public void execute() throws MojoExecutionException, MojoFailureException {
         if (skip) {
             getLog().debug("Skipped.");
             return;
+        }
+
+        InvocationRequest request = new DefaultInvocationRequest();
+        request.setGoals(Collections.singletonList("dependency:unpack"));
+
+        try {
+            final File pom = File.createTempFile("pom", ".xml");
+            pom.deleteOnExit();
+            InputStream pomInputStream = this.getClass().getResourceAsStream("/pom.xml");
+
+            try (FileOutputStream out = new FileOutputStream(pom)) {
+                IOUtils.copy(pomInputStream, out);
+            }
+
+            Properties properties = new Properties();
+            properties.setProperty("outputDirectory", new File(pgsqlHome).getParent());
+            properties.setProperty("postgresql.version", version);
+
+            request.setProperties(properties);
+            request.setPomFile(pom);
+            request.setInteractive(false);
+
+            Invoker invoker = new DefaultInvoker();
+            InvocationResult result = invoker.execute(request);
+            if (result.getExitCode() != 0) {
+                throw new MojoExecutionException(result.getExecutionException().getMessage(), result.getExecutionException().getCause());
+            }
+        } catch (Exception e) {
+            throw new MojoExecutionException(e.getMessage(), e.getCause());
         }
 
         final List<String> cmd = createCommand();

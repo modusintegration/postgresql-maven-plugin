@@ -23,10 +23,11 @@
                     <pgsqlHome>@project.build.directory@/pgsql</pgsqlHome>
                     <dataDir>${project.build.directory}/data</dataDir>
                     <username>postgres</username>
-                    <passwordFile>password.txt</passwordFile>
                     <encoding>UTF8</encoding>
                     <locale>sv_SE</locale>
                     <databaseName>createanddrop</databaseName>
+                    <version>9.3.9</version>
+                    <port>5433</port>
                 </configuration>
                 <executions>
                     <execution>

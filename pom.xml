@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.adrianboimvaser</groupId>
+    <groupId>com.modus</groupId>
     <artifactId>postgresql-maven-plugin</artifactId>
     <version>0.2</version>
     <packaging>maven-plugin</packaging>
@@ -19,38 +19,38 @@
         </license>
     </licenses>
 
-    <developers>
-        <developer>
-            <id>adrianboimvaser</id>
-            <name>Adrián Boimvaser</name>
-            <email>adrianboimvaser@gmail.com</email>
-        </developer>
-    </developers>
-
     <scm>
-        <url>https://github.com/adrianboimvaser/postgresql-maven-plugin.git</url>
-        <connection>scm:git:git://github.com/adrianboimvaser/postgresql-maven-plugin.git</connection>
-        <developerConnection>scm:git:https://github.com/adrianboimvaser/postgresql-maven-plugin.git</developerConnection>
         <tag>v0.2</tag>
     </scm>
 
     <distributionManagement>
         <repository>
-            <id>sonatype-nexus-staging</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+            <id>modus-repository-releases</id>
+            <name>ModusBox Releases Repository</name>
+            <url>http://dev.modusintegration.com/repositories/releases/</url>
         </repository>
         <snapshotRepository>
-            <id>sonatype-nexus-snapshots</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <id>modus-repository-snapshots</id>
+            <name>ModusBox Snapshots Repository</name>
+            <url>http://dev.modusintegration.com/repositories/snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <postgresql-dist.version>9.2.4</postgresql-dist.version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.shared</groupId>
+            <artifactId>maven-invoker</artifactId>
+            <version>2.2</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-plugin-api</artifactId>
@@ -133,10 +133,6 @@
                         <goal>clean</goal>
                         <goal>install</goal>
                     </goals>
-                    <properties>
-                        <postgresql-dist.classifier>${postgresql-dist.classifier}</postgresql-dist.classifier>
-                        <postgresql-dist.type>${postgresql-dist.type}</postgresql-dist.type>
-                    </properties>
                 </configuration>
                 <executions>
                     <execution>
@@ -181,175 +177,6 @@
         </pluginManagement>
     </build>
     <profiles>
-        <profile>
-            <id>linux-x86</id>
-            <activation>
-                <os>
-                    <family>unix</family>
-                    <name>Linux</name>
-                    <arch>x86</arch>
-                </os>
-            </activation>
-            <properties>
-                <postgresql-dist.classifier>linux</postgresql-dist.classifier>
-                <postgresql-dist.type>tar.gz</postgresql-dist.type>
-            </properties>
-        </profile>
-        <profile>
-            <id>linux-x64</id>
-            <activation>
-                <os>
-                    <family>unix</family>
-                    <name>Linux</name>
-                    <arch>amd64</arch>
-                </os>
-            </activation>
-            <properties>
-                <postgresql-dist.classifier>linux-x64</postgresql-dist.classifier>
-                <postgresql-dist.type>tar.gz</postgresql-dist.type>
-            </properties>
-        </profile>
-        <profile>
-            <id>windows-x86</id>
-            <activation>
-                <os>
-                    <family>windows</family>
-                    <arch>x86</arch>
-                </os>
-            </activation>
-            <properties>
-                <postgresql-dist.classifier>windows</postgresql-dist.classifier>
-                <postgresql-dist.type>zip</postgresql-dist.type>
-            </properties>
-        </profile>
-        <profile>
-            <id>windows-x64</id>
-            <activation>
-                <os>
-                    <family>windows</family>
-                    <arch>amd64</arch>
-                </os>
-            </activation>
-            <properties>
-                <postgresql-dist.classifier>windows-x64</postgresql-dist.classifier>
-                <postgresql-dist.type>zip</postgresql-dist.type>
-            </properties>
-        </profile>
-        <profile>
-            <id>osx</id>
-            <activation>
-                <os>
-                    <family>mac</family>
-                </os>
-            </activation>
-            <properties>
-                <postgresql-dist.classifier>osx</postgresql-dist.classifier>
-                <postgresql-dist.type>zip</postgresql-dist.type>
-            </properties>
-        </profile>
-        <profile>
-            <id>unix</id>
-            <activation>
-                <os>
-                    <family>unix</family>
-                    <!-- tested on Linux and OSX -->
-                </os>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                        <version>2.8</version>
-                        <executions>
-                            <execution>
-                                <id>copy-postgresql-linux</id>
-                                <phase>pre-integration-test</phase>
-                                <goals>
-                                    <goal>copy</goal>
-                                </goals>
-                                <configuration>
-                                    <skip>${skipITs}</skip>
-                                    <artifactItems>
-                                        <artifactItem>
-                                            <groupId>com.github.adrianboimvaser</groupId>
-                                            <artifactId>postgresql-dist</artifactId>
-                                            <classifier>${postgresql-dist.classifier}</classifier>
-                                            <version>${postgresql-dist.version}</version>
-                                            <type>${postgresql-dist.type}</type>
-                                            <overWrite>true</overWrite>
-                                            <outputDirectory>${project.build.directory}</outputDirectory>
-                                        </artifactItem>
-                                    </artifactItems>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <version>1.2.1</version>
-                        <executions>
-                            <execution>
-                                <id>unzip-postgresql-linux</id>
-                                <phase>pre-integration-test</phase>
-                                <goals>
-                                    <goal>exec</goal>
-                                </goals>
-                                <configuration>
-                                    <skip>${skipITs}</skip>
-                                    <executable>tar</executable>
-                                    <arguments>
-                                        <argument>-zxvf</argument>
-                                        <argument>${project.build.directory}/postgresql-dist-${postgresql-dist.version}-${postgresql-dist.classifier}.${postgresql-dist.type}</argument>
-                                        <argument>-C</argument>
-                                        <argument>${project.build.directory}</argument>
-                                    </arguments>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>windows</id>
-            <activation>
-                <os>
-                    <family>windows</family>
-                </os>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                        <version>2.6</version>
-                        <executions>
-                            <execution>
-                                <id>unpack-postgresql-windows</id>
-                                <phase>pre-integration-test</phase>
-                                <goals>
-                                    <goal>unpack</goal>
-                                </goals>
-                                <configuration>
-                                    <skip>${skipITs}</skip>
-                                    <artifactItems>
-                                        <artifactItem>
-                                            <groupId>com.github.adrianboimvaser</groupId>
-                                            <artifactId>postgresql-dist</artifactId>
-                                            <classifier>${postgresql-dist.classifier}</classifier>
-                                            <version>${postgresql-dist.version}</version>
-                                            <type>${postgresql-dist.type}</type>
-                                            <overWrite>true</overWrite>
-                                            <outputDirectory>${project.build.directory}</outputDirectory>
-                                        </artifactItem>
-                                    </artifactItems>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
         <profile>
             <id>release-sign-artifacts</id>
             <activation>

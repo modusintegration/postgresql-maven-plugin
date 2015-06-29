@@ -1,0 +1,114 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.modus</groupId>
+    <artifactId>postgresql-maven-plugin</artifactId>
+    <version>0.2</version>
+
+    <profiles>
+        <profile>
+            <id>linux-x86</id>
+            <activation>
+                <os>
+                    <family>unix</family>
+                    <name>Linux</name>
+                    <arch>x86</arch>
+                </os>
+            </activation>
+            <properties>
+                <postgresql-dist.classifier>linux</postgresql-dist.classifier>
+                <postgresql-dist.type>tar.gz</postgresql-dist.type>
+            </properties>
+        </profile>
+        <profile>
+            <id>linux-x64</id>
+            <activation>
+                <os>
+                    <family>unix</family>
+                    <name>Linux</name>
+                    <arch>amd64</arch>
+                </os>
+            </activation>
+            <properties>
+                <postgresql-dist.classifier>linux-x64</postgresql-dist.classifier>
+                <postgresql-dist.type>tar.gz</postgresql-dist.type>
+            </properties>
+        </profile>
+        <profile>
+            <id>windows-x86</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                    <arch>x86</arch>
+                </os>
+            </activation>
+            <properties>
+                <postgresql-dist.classifier>windows</postgresql-dist.classifier>
+                <postgresql-dist.type>zip</postgresql-dist.type>
+            </properties>
+        </profile>
+        <profile>
+            <id>windows-x64</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                    <arch>amd64</arch>
+                </os>
+            </activation>
+            <properties>
+                <postgresql-dist.classifier>windows-x64</postgresql-dist.classifier>
+                <postgresql-dist.type>zip</postgresql-dist.type>
+            </properties>
+        </profile>
+        <profile>
+            <id>osx</id>
+            <activation>
+                <os>
+                    <family>mac</family>
+                </os>
+            </activation>
+            <properties>
+                <postgresql-dist.classifier>osx</postgresql-dist.classifier>
+                <postgresql-dist.type>zip</postgresql-dist.type>
+            </properties>
+        </profile>
+    </profiles>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <configuration>
+                    <artifactItems>
+                        <artifactItem>
+                            <groupId>com.modus</groupId>
+                            <artifactId>postgresql-dist</artifactId>
+                            <version>${postgresql.version}</version>
+                            <classifier>${postgresql-dist.classifier}</classifier>
+                            <type>${postgresql-dist.type}</type>
+                            <overWrite>true</overWrite>
+                            <outputDirectory>${outputDirectory}</outputDirectory>
+                        </artifactItem>
+                    </artifactItems>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <repositories>
+        <repository>
+            <id>modus-repository-releases</id>
+            <name>ModusBox Releases Repository</name>
+            <url>http://dev.modusintegration.com/repositories/releases/</url>
+        </repository>
+
+        <repository>
+            <id>modus-repository-snapshots</id>
+            <name>ModusBox Snapshots Repository</name>
+            <url>http://dev.modusintegration.com/repositories/snapshots/</url>
+        </repository>
+    </repositories>
+
+</project>

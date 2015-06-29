@@ -24,8 +24,9 @@
                     <dataDir>${project.build.directory}/data</dataDir>
                     <logfile>${project.build.directory}/postgres.log</logfile>
                     <username>postgres</username>
-                    <passwordFile>password.txt</passwordFile>
                     <timeoutInSeconds>60</timeoutInSeconds>
+                    <version>9.3.9</version>
+                    <port>5433</port>
                 </configuration>
                 <executions>
                     <execution>
