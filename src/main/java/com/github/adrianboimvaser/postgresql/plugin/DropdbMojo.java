@@ -16,7 +16,7 @@ public class DropdbMojo extends PgsqlMojo {
     protected String username;
 
     @Parameter(required = true)
-    protected String databaseName;
+    protected List<String> databaseNames;
 
     @Parameter
     protected String host;
@@ -38,32 +38,34 @@ public class DropdbMojo extends PgsqlMojo {
             return;
         }
 
-        final List<String> cmd = createCommand();
-        if (getLog().isDebugEnabled()) {
-            getLog().debug(cmd.toString());
-        }
+        for (String databaseName : databaseNames) {
+            final List<String> cmd = createCommand(databaseName);
+            if (getLog().isDebugEnabled()) {
+                getLog().debug(cmd.toString());
+            }
 
-        final ProcessBuilder processBuilder = new ProcessBuilder(cmd);
-        String message = "";
-        Exception cause = null;
-        int returnValue = Integer.MIN_VALUE;
-        try {
-            Process process = processBuilder.start();
-            logOutput(process);
-            returnValue = process.waitFor();
-            message = "dropdb returned " + returnValue;
-            getLog().debug(message);
-        } catch (IOException|InterruptedException e) {
-            message = e.getLocalizedMessage();
-            cause = e;
-            getLog().error(e);
-        }
-        if (returnValue != 0 && failOnError) {
-            throw new MojoExecutionException(message, cause);
+            final ProcessBuilder processBuilder = new ProcessBuilder(cmd);
+            String message = "";
+            Exception cause = null;
+            int returnValue = Integer.MIN_VALUE;
+            try {
+                Process process = processBuilder.start();
+                logOutput(process);
+                returnValue = process.waitFor();
+                message = "dropdb returned " + returnValue;
+                getLog().debug(message);
+            } catch (IOException|InterruptedException e) {
+                message = e.getLocalizedMessage();
+                cause = e;
+                getLog().error(e);
+            }
+            if (returnValue != 0 && failOnError) {
+                throw new MojoExecutionException(message, cause);
+            }
         }
     }
 
-    private List<String> createCommand() throws MojoExecutionException {
+    private List<String> createCommand(String databaseName) throws MojoExecutionException {
         List<String> cmd = new ArrayList<String>();
         cmd.add(getCommandPath("dropdb"));
 

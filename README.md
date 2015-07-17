@@ -14,7 +14,9 @@ Usage example:
             <pgsqlHome>${project.build.directory}/pgsql</pgsqlHome>
             <dataDir>${project.build.directory}/data</dataDir>
             <skip>${skipITs}</skip>
-            <databaseName>postgres</databaseName>
+            <databaseNames>
+                <databaseName>postgres</databaseName>
+            </databaseNames>
             <username>postgres</username>
         </configuration>
         <executions>
@@ -56,7 +58,9 @@ Usage example:
                 </goals>
                 <configuration>
                     <username>postgres</username>
-                    <databaseName>products</databaseName>
+                    <databaseNames>
+                        <databaseName>products</databaseName>
+                    </databaseNames>
                 </configuration>
             </execution>
             <execution>
@@ -67,7 +71,9 @@ Usage example:
                 </goals>
                 <configuration>
                     <username>postgres</username>
-                    <databaseName>products</databaseName>
+                    <databaseNames>
+                        <databaseName>products</databaseName>
+                    </databaseNames>
                 </configuration>
             </execution>
             <execution>

@@ -25,7 +25,9 @@
                     <username>postgres</username>
                     <encoding>UTF8</encoding>
                     <locale>sv_SE</locale>
-                    <databaseName>createanddrop</databaseName>
+                    <databaseNames>
+                        <databaseName>createanddrop</databaseName>
+                    </databaseNames>
                     <version>9.3.9</version>
                     <port>5433</port>
                 </configuration>
