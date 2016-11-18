@@ -1,18 +1,13 @@
 package com.github.adrianboimvaser.postgresql.plugin;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Mojo(name = "start")
 public class StartMojo extends PgctlMojo {
@@ -169,6 +164,11 @@ public class StartMojo extends PgctlMojo {
             cmd.add("-p");
             cmd.add(port.toString());
         }
+
+        cmd.add("-c");
+        cmd.add("fsync=false");
+        cmd.add("-c");
+        cmd.add("full_page_writes=false");
 
         if (parameters != null) {
             for (Map.Entry<String, String> entry : parameters.entrySet()) {
