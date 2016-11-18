@@ -106,6 +106,8 @@ public class InitdbMojo extends PgsqlMojo {
         cmd.add("-D");
         cmd.add(dataDir);
 
+        cmd.add("--nosync");
+
         if (username != null) {
             cmd.add("-U");
             cmd.add(username);
