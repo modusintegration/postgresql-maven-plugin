@@ -12,6 +12,7 @@ public class StopMojo extends PgctlMojo {
 
     @Override
     public void doExecute() throws MojoExecutionException {
+        init();
 
         final List<String> cmd = createCommand();
         if (getLog().isDebugEnabled()) {

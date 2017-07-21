@@ -1,10 +1,7 @@
 package com.github.adrianboimvaser.postgresql.plugin;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -35,18 +32,18 @@ public class InitdbMojo extends PgsqlMojo {
     @Parameter(alias = "data-checksums", property = "data-checksums", defaultValue = "false")
     protected boolean dataChecksums;
 
-    @Parameter
-    protected String version;
-
+    @Parameter(defaultValue = "true")
+    protected boolean overWrite;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
+        init();
         if (skip) {
             getLog().debug("Skipped.");
             return;
         }
 
         InvocationRequest request = new DefaultInvocationRequest();
-        request.setGoals(Collections.singletonList("dependency:unpack"));
+        request.setGoals(Arrays.asList("dependency:unpack", "antrun:run"));
 
         try {
             final File pom = File.createTempFile("pom", ".xml");
@@ -58,8 +55,10 @@ public class InitdbMojo extends PgsqlMojo {
             }
 
             Properties properties = new Properties();
-            properties.setProperty("outputDirectory", new File(pgsqlHome).getParent());
+            properties.setProperty("outputDirectory", new File(pgsqlHomeVersion).getParent());
             properties.setProperty("postgresql.version", version);
+            properties.setProperty("overWrite", String.valueOf(overWrite));
+            properties.setProperty("pgsqlHomeVersion", pgsqlHomeVersion);
 
             request.setProperties(properties);
             request.setPomFile(pom);

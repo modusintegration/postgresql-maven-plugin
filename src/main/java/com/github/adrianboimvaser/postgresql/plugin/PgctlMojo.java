@@ -19,6 +19,7 @@ public abstract class PgctlMojo extends PgsqlMojo {
     private boolean wait;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
+        init();
         if (skip) {
             getLog().debug("Skipped.");
             return;

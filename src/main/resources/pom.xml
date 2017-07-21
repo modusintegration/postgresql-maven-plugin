@@ -4,7 +4,7 @@
 
     <groupId>com.modus</groupId>
     <artifactId>postgresql-maven-plugin</artifactId>
-    <version>0.3.3</version>
+    <version>0.3.4</version>
 
     <profiles>
         <profile>
@@ -88,11 +88,46 @@
                             <version>${postgresql.version}</version>
                             <classifier>${postgresql-dist.classifier}</classifier>
                             <type>${postgresql-dist.type}</type>
-                            <overWrite>true</overWrite>
+                            <overWrite>${overWrite}</overWrite>
                             <outputDirectory>${outputDirectory}</outputDirectory>
+                            <destFileName>${pgsqlHomeVersion}</destFileName>
                         </artifactItem>
                     </artifactItems>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <configuration>
+                    <tasks>
+                        <taskdef resource="net/sf/antcontrib/antlib.xml" classpathref="maven.dependency.classpath"/>
+                        <if>
+                            <available file="${outputDirectory}/pgsql"/>
+                            <then>
+                                <move file="${outputDirectory}/pgsql" tofile="${pgsqlHomeVersion}"/>
+                            </then>
+                        </if>
+                    </tasks>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>ant-contrib</groupId>
+                        <artifactId>ant-contrib</artifactId>
+                        <version>1.0b3</version>
+                        <exclusions>
+                            <exclusion>
+                                <groupId>ant</groupId>
+                                <artifactId>ant</artifactId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.ant</groupId>
+                        <artifactId>ant-nodeps</artifactId>
+                        <version>1.8.1</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>

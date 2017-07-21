@@ -31,6 +31,7 @@ public class StartMojo extends PgctlMojo {
 
     @Override
     public void doExecute() throws MojoExecutionException {
+        init();
 
         List<String> cmd = createPostgresCommand();
         if (getLog().isDebugEnabled()) {

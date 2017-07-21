@@ -33,6 +33,7 @@ public class DropdbMojo extends PgsqlMojo {
     protected boolean noPassword;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
+        init();
         if (skip) {
             getLog().debug("Skipped.");
             return;
