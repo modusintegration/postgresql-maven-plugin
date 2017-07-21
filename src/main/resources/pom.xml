@@ -105,7 +105,7 @@
                         <if>
                             <available file="${outputDirectory}/pgsql"/>
                             <then>
-                                <move file="${outputDirectory}/pgsql" tofile="${pgsqlHomeVersion}"/>
+                                <move file="${outputDirectory}/pgsql" tofile="${pgsqlHomeVersion}" force="true"/>
                             </then>
                         </if>
                     </tasks>
