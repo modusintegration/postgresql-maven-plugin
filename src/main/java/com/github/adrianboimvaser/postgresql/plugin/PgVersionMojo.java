@@ -33,7 +33,6 @@ public class PgVersionMojo extends PgsqlMojo {
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
-        init();
         if (skip) {
             return;
         }

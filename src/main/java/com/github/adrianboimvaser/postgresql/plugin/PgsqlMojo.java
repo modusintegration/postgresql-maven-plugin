@@ -1,19 +1,15 @@
 package com.github.adrianboimvaser.postgresql.plugin;
 
-import java.io.File;
-
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Parameter;
+
+import java.io.File;
 
 public abstract class PgsqlMojo extends AbstractMojo {
 
     @Parameter(required = true)
     protected String pgsqlHome;
-
-    @Parameter
-    protected String version;
 
     @Parameter
     protected boolean skip;
@@ -22,31 +18,24 @@ public abstract class PgsqlMojo extends AbstractMojo {
     @Parameter
     protected boolean failOnError = true;
 
-    protected String pgsqlHomeVersion;
-
     public PgsqlMojo() {
         //
     }
 
-    public PgsqlMojo(String pgsqlHome, String version) {
+    public PgsqlMojo(String pgsqlHome) {
         this.pgsqlHome = pgsqlHome;
-        pgsqlHomeVersion = pgsqlHome + "-" + version;
-    }
-
-    public void init() {
-        pgsqlHomeVersion = pgsqlHome + "-" + version;
     }
 
     protected String getCommandPath(String command) throws MojoExecutionException {
 
-        final File pgsqlHomeFile = new File(pgsqlHomeVersion);
+        final File pgsqlHomeFile = new File(pgsqlHome);
 
         if (!pgsqlHomeFile.isDirectory()) {
             throw new MojoExecutionException(String.format(
-                    "'%s' is not a valid directory.", pgsqlHomeVersion));
+                    "'%s' is not a valid directory.", pgsqlHome));
         }
 
-        return new File(new File(pgsqlHomeVersion, "bin"), command).getAbsolutePath();
+        return new File(new File(pgsqlHome, "bin"), command).getAbsolutePath();
     }
 
     protected void logOutput(Process process) {

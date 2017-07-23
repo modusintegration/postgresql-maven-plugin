@@ -1,18 +1,17 @@
 package com.github.adrianboimvaser.postgresql.plugin;
 
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Mojo;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Mojo;
 
 @Mojo(name = "stop")
 public class StopMojo extends PgctlMojo {
 
     @Override
     public void doExecute() throws MojoExecutionException {
-        init();
 
         final List<String> cmd = createCommand();
         if (getLog().isDebugEnabled()) {

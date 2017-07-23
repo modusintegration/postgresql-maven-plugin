@@ -1,13 +1,13 @@
 package com.github.adrianboimvaser.postgresql.plugin;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Mojo(name = "createdb")
 public class CreatedbMojo extends PgsqlMojo {
@@ -35,8 +35,6 @@ public class CreatedbMojo extends PgsqlMojo {
     protected boolean noPassword;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
-        init();
-
         if (skip) {
             getLog().debug("Skipped.");
             return;
