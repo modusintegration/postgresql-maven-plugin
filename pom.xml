@@ -21,14 +21,14 @@
 
     <distributionManagement>
         <repository>
-            <id>modus-repository-releases</id>
-            <name>ModusBox Releases Repository</name>
-            <url>http://dev.modusintegration.com/repositories/releases/</url>
+            <id>portx-repository-releases</id>
+            <name>PortX Releases Repository</name>
+            <url>https://portx.jfrog.io/portx/portx-releases/</url>
         </repository>
         <snapshotRepository>
-            <id>modus-repository-snapshots</id>
-            <name>ModusBox Snapshots Repository</name>
-            <url>http://dev.modusintegration.com/repositories/snapshots/</url>
+            <id>portx-repository-snapshots</id>
+            <name>PortX Snapshots Repository</name>
+            <url>https://portx.jfrog.io/portx/portx-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 
